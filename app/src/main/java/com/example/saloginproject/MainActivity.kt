@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -14,6 +13,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
+    lateinit var email : String
+    lateinit var password : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -24,25 +25,27 @@ class MainActivity : AppCompatActivity() {
 
             progressBar.visibility = View.VISIBLE
 
-            var email = editTextEmail.text.toString()
-            var password = editTextTextPassword.text.toString()
+            email = editTextEmail.text.toString()
+            password = editTextTextPassword.text.toString()
 
-          //  var userlogin = UserLogin(email!!, password!!)
+            //  var userlogin = UserLogin(email!!, password!!)
 
             var makecall = RetrofitClient.myRetrofit.ApiClientuserLogin(email, password)
 
-            makecall.enqueue(object : Callback<ResponseBody>{
-                override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
-                ) {
+            makecall.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     progressBar.visibility = View.GONE
+
+
+
                     if(response.isSuccessful){
 
-                        var data = response.body().toString()
+                        var data = response.body()
                         Log.i("mytag"," is : " + response.body()!!.string())
 
-                      var i = Intent(this@MainActivity, DashBoardActivity::class.java)
+                        storeData(email, password)
+
+                        var i = Intent(this@MainActivity, DashBoardActivity::class.java)
                         startActivity(i)
                     }
 
@@ -52,18 +55,42 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(applicationContext, "LOGIN FAILED " ,Toast.LENGTH_LONG).show()
 
                     }
-
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-
-                    Log.i("mytag" ,"Failed Call : "+ t.message)
                 }
-
-
             })
-
-
         }
+    }
+
+    private fun storeData(email: String, password: String) {
+
+
+        var makecall2 =  RetrofitClient2.myRetrofit.ApiClientuserLogin(email, password)
+
+        makecall2.enqueue(object : Callback<UserLogin>{
+            override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
+
+                var myresponse = response.body()
+
+                var data = myresponse?.user
+
+                var e =   data?.email
+                var n= data?.name
+
+                Toast.makeText(this@MainActivity,"name is $n and email is $e ",Toast.LENGTH_LONG).show()
+
+
+
+
+
+
+            }
+
+            override fun onFailure(call: Call<UserLogin>, t: Throwable) {
+            }
+
+        })
+
     }
 }

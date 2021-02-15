@@ -6,7 +6,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 
-interface ApiClient {
+
+interface ApiClient2 {
 
 
     @FormUrlEncoded
@@ -14,27 +15,21 @@ interface ApiClient {
     fun ApiClientuserLogin(
         @Field("email") emailOne: String,
         @Field("password") passwordOne: String
-    ): Call<ResponseBody>
+    ): Call<UserLogin>
 
-/*    @GET("login")
-    fun ApiClientUserLogin(@Body userdata: List<UserLogin>) : Call<List<UserLogin>>
-}*/
-
+   /*@GET("login")
+    fun ApiClientUserLogin() : Call<UserLogin>*/
 }
 
-class RetrofitClient {
+
+
+class RetrofitClient2 {
 
     companion object {
         val myRetrofit = Retrofit.Builder()
             .baseUrl("https://api.simplifiedcoding.in/course-apis/mvvm/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(ApiClient::class.java)
+            .create(ApiClient2::class.java)
     }
-
-
 }
-
-/*
-probelalkhan@gmail.com
-123456*/
