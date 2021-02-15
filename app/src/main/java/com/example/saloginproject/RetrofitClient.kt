@@ -11,7 +11,7 @@ interface ApiClient{
 
     @FormUrlEncoded
     @POST("login")
-    fun ApiClientuserLogin(@Field("email")  email : String,  @Field("password")  password : String) : Call<ResponseBody>
+    fun ApiClientuserLogin(@Field("email")  emailOne : String,  @Field("password")  passwordOne : String) : Call<ResponseBody>
 
     /*@POST("login")
     fun ApiClientUserLogin(@Body userdata : UserLogin) : Call<ResponseBody>*/

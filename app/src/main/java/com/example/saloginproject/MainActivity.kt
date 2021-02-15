@@ -1,9 +1,12 @@
 package com.example.saloginproject
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -15,7 +18,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        progressBar.visibility = View.GONE
+
         buttonLogin.setOnClickListener {
+
+            progressBar.visibility = View.VISIBLE
 
             var email = editTextEmail.text.toString()
             var password = editTextTextPassword.text.toString()
@@ -29,19 +36,20 @@ class MainActivity : AppCompatActivity() {
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    runOnUiThread {
-                        Toast.makeText(applicationContext, "checking response : " + response.body()!!.toString(),Toast.LENGTH_LONG).show()
-                    }
-
+                    progressBar.visibility = View.GONE
                     if(response.isSuccessful){
 
                         var data = response.body().toString()
                         Log.i("mytag"," is : " + response.body()!!.string())
+
+                      var i = Intent(this@MainActivity, DashBoardActivity::class.java)
+                        startActivity(i)
                     }
 
                     else {
                         var errordata = response.errorBody().toString()
                         Log.i("mytag"," is : " + response.errorBody()!!.string())
+                        Toast.makeText(applicationContext, "LOGIN FAILED " ,Toast.LENGTH_LONG).show()
 
                     }
 
