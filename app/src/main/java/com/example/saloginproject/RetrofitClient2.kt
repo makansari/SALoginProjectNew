@@ -17,8 +17,7 @@ interface ApiClient2 {
         @Field("password") passwordOne: String
     ): Call<UserLogin>
 
-   /*@GET("login")
-    fun ApiClientUserLogin() : Call<UserLogin>*/
+
 }
 
 
